@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DISHHOLIC</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    height:100vh;
+    width:100%;
+
+    background-repeat:no-repeat;
+    background-position:center;
+    background-attachment:fixed;
+    background-size:cover;
+
+    position:relative;
+    overflow:hidden;
+    transition: background-image 1s ease-in-out;
+}
+
+/* BLUR OVERLAY */
+body::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    backdrop-filter: blur(8px);
+    background: rgba(0,0,0,0.2);
+    z-index:0;
+}
+
+/* NAVBAR */
+.navbar{
+    position: relative;
+    z-index:1;
+    padding:15px 20px;
+    text-align:right;
+}
+
+.navbar a{
+    text-decoration:none;
+    color:white;
+    background: rgba(19,173,173,0.7);
+    padding:10px 18px;
+    border-radius:5px;
+    font-size:14px;
+}
+
+/* CENTER */
+.center-box{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position: relative;
+    z-index:1;
+}
+
+.center-content{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap; /* important for mobile */
+    justify-content:center;
+    text-align:center;
+}
+
+/* LOGO */
+.logo{
+    width:clamp(80px, 15vw, 140px);
+    height:auto;
+    object-fit:contain;
+    animation: logoMove 1.2s ease-out;
+}
+
+/* APP NAME (🔥 RESPONSIVE BIG TEXT) */
+.app-name{
+    font-weight:bold;
+    font-size:clamp(36px, 8vw, 64px); /* 👈 MAGIC LINE */
+    color:#13adad;
+
+    background: linear-gradient(90deg,#0b7a75,#13adad);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    animation: textMove 1.2s ease-out;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+}
+
+/* ANIMATIONS */
+@keyframes logoMove{
+    from{
+        transform:translateX(-80px);
+        opacity:0;
+    }
+    to{
+        transform:translateX(0);
+        opacity:1;
+    }
+}
+
+@keyframes textMove{
+    from{
+        transform:translateX(80px);
+        opacity:0;
+    }
+    to{
+        transform:translateX(0);
+        opacity:1;
+    }
+}
+
+/* -------- RESPONSIVE -------- */
+
+/* MOBILE */
+@media (max-width:480px){
+    .center-content{
+        flex-direction:column; /* stack logo + text */
+        gap:10px;
+    }
+
+    .app-name{
+        font-size:clamp(40px, 10vw, 56px); /* bigger on mobile */
+    }
+}
+
+/* TABLET */
+@media (min-width:481px) and (max-width:768px){
+    .app-name{
+        font-size:clamp(44px, 7vw, 60px);
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <a href="/login/">Login</a>
+</div>
+
+<div class="center-box">
+    <div class="center-content">
+        <img src="{% static 'recipes/images/DISHHOLIC.png' %}" class="logo">
+        <div class="app-name">DISHHOLIC</div>
+    </div>
+</div>
+
+<script>
+const backgrounds = [
+    "{% static 'recipes/images/background1.png' %}",
+    "{% static 'recipes/images/background2.png' %}",
+    "{% static 'recipes/images/background3.png' %}"
+];
+
+let index = 0;
+
+function changeBackground() {
+    document.body.style.backgroundImage = `url('${backgrounds[index]}')`;
+    index = (index + 1) % backgrounds.length;
+}
+
+changeBackground();
+setInterval(changeBackground, 5000);
+</script>
+
+</body>
+</html>

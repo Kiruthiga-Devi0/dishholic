@@ -1,0 +1,260 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up | DISHHOLIC</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family: Arial, sans-serif;
+
+    background-repeat:no-repeat;
+    background-position:center;
+    background-attachment:fixed;
+    background-size:cover;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+
+    transition: background-image 1s ease-in-out;
+}
+
+/* Blur overlay */
+body::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(6px);
+    z-index:0;
+}
+
+/* SIGNUP BOX */
+.signup-box{
+    position:relative;
+    z-index:1;
+    width:90%;
+    max-width:380px;
+    padding:30px;
+    border-radius:12px;
+    background: rgba(89,97,97,0.92);
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+    text-align:center;
+}
+
+/* TITLE */
+.signup-box h2{
+    color:#29a8a2;
+    margin-bottom:20px;
+    font-size:24px;
+}
+
+/* INPUT GROUP */
+.input-group{
+    position:relative;
+}
+
+/* INPUT */
+input{
+    width:100%;
+    padding:12px 40px 12px 12px;
+    margin:10px 0;
+    border-radius:6px;
+    border:1px solid #ccc;
+    font-size:15px;
+}
+
+input:focus{
+    outline:none;
+    border-color:#13adad;
+}
+
+/* EYE ICON */
+.eye{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+}
+
+.eye svg{
+    width:20px;
+    height:20px;
+    stroke:#333;
+    stroke-width:1.7;
+    fill:none;
+}
+
+/* BUTTON */
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    background:#13adad;
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#0b7a75;
+}
+
+/* LINKS */
+.links{
+    margin-top:15px;
+}
+
+.links a{
+    color:#13adad;
+    text-decoration:none;
+    font-size:14px;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+
+/* MOBILE (small phones) */
+@media (max-width:480px){
+    .signup-box{
+        padding:22px;
+        border-radius:10px;
+    }
+
+    .signup-box h2{
+        font-size:20px;
+    }
+
+    input{
+        font-size:14px;
+        padding:10px 38px 10px 10px;
+    }
+
+    button{
+        font-size:15px;
+        padding:10px;
+    }
+}
+
+/* TABLET */
+@media (min-width:481px) and (max-width:768px){
+    .signup-box{
+        max-width:420px;
+        padding:30px;
+    }
+
+    .signup-box h2{
+        font-size:22px;
+    }
+}
+
+/* LAPTOP / LARGE */
+@media (min-width:769px){
+    .signup-box{
+        max-width:420px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="signup-box">
+    <h2>SIGN UP</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="email" name="email" placeholder="Email" required>
+
+        <!-- PASSWORD -->
+        <div class="input-group">
+            <input type="password" id="password1" name="password1" placeholder="Password" required>
+            <span class="eye" onclick="togglePassword('password1', this)">
+                <svg class="eye-open" viewBox="0 0 24 24">
+                    <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <svg class="eye-off" viewBox="0 0 24 24" style="display:none">
+                    <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                    <line x1="3" y1="3" x2="21" y2="21"/>
+                </svg>
+            </span>
+        </div>
+
+        <!-- CONFIRM PASSWORD -->
+        <div class="input-group">
+            <input type="password" id="password2" name="password2" placeholder="Confirm Password" required>
+            <span class="eye" onclick="togglePassword('password2', this)">
+                <svg class="eye-open" viewBox="0 0 24 24">
+                    <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <svg class="eye-off" viewBox="0 0 24 24" style="display:none">
+                    <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                    <line x1="3" y1="3" x2="21" y2="21"/>
+                </svg>
+            </span>
+        </div>
+
+        <button type="submit">Create Account</button>
+    </form>
+
+    <div class="links">
+        <p><a href="/login/">Already have an account? Login</a></p>
+    </div>
+</div>
+
+<script>
+const backgrounds = [
+    "{% static 'recipes/images/signup-bg1.png' %}",
+    "{% static 'recipes/images/signup-bg2.png' %}",
+    "{% static 'recipes/images/signup-bg3.png' %}"
+];
+
+let index = 0;
+
+function changeBackground(){
+    document.body.style.backgroundImage = `url('${backgrounds[index]}')`;
+    index = (index + 1) % backgrounds.length;
+}
+
+changeBackground();
+setInterval(changeBackground, 5000);
+
+function togglePassword(id, icon){
+    const input = document.getElementById(id);
+    const openEye = icon.querySelector(".eye-open");
+    const offEye = icon.querySelector(".eye-off");
+
+    if(input.type === "password"){
+        input.type = "text";
+        openEye.style.display = "none";
+        offEye.style.display = "block";
+    }else{
+        input.type = "password";
+        openEye.style.display = "block";
+        offEye.style.display = "none";
+    }
+}
+</script>
+
+</body>
+</html>

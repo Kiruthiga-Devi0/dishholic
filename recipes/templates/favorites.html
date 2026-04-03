@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Favorites | DISHHOLIC</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family: Arial, sans-serif;
+    background:#0a0a0a;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:20px;
+    position:relative;
+    overflow-x:hidden;
+}
+
+/* BACKGROUND OVERLAY */
+body::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    z-index:0;
+}
+
+/* TITLE */
+.page-title{
+    position:relative;
+    z-index:1;
+    font-size:28px;
+    color:#0ff;
+    margin-bottom:25px;
+    text-align:center;
+}
+
+/* GRID CONTAINER */
+.favorites-container{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap:18px;
+    width:100%;
+    max-width:1200px;
+}
+
+/* CARD */
+.recipe-card{
+    background: rgba(0,255,255,0.08);
+    padding:15px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,255,255,0.3);
+    text-align:center;
+    transition:0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.recipe-card:hover{
+    transform: translateY(-5px);
+}
+
+/* IMAGE */
+.recipe-card img{
+    width:100%;
+    height:140px;
+    object-fit:cover;
+    border-radius:10px;
+}
+
+/* TITLE */
+.recipe-card h3{
+    margin:10px 0;
+    color:#0ff;
+    font-size:16px;
+}
+
+/* BUTTONS */
+.recipe-card .buttons{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-top:10px;
+    flex-wrap:wrap;
+}
+
+.recipe-card a,
+.recipe-card button{
+    padding:6px 10px;
+    border-radius:6px;
+    font-size:13px;
+    text-decoration:none;
+    cursor:pointer;
+    border:1px solid #0ff;
+    background:transparent;
+    color:#0ff;
+}
+
+.recipe-card a:hover{
+    background: rgba(0,255,255,0.2);
+}
+
+.recipe-card button{
+    border:1px solid #f44;
+    color:#f44;
+}
+
+.recipe-card button:hover{
+    background: rgba(255,0,0,0.2);
+    color:#fff;
+}
+
+/* NO DATA */
+.no-favorites{
+    color:#ccc;
+    font-size:16px;
+    text-align:center;
+    margin-top:40px;
+}
+
+/* -------------------- */
+/* 📱 MOBILE */
+/* -------------------- */
+@media (max-width:600px){
+
+.page-title{
+    font-size:22px;
+}
+
+.recipe-card{
+    padding:12px;
+}
+
+.recipe-card h3{
+    font-size:15px;
+}
+
+.recipe-card img{
+    height:120px;
+}
+
+}
+
+/* -------------------- */
+/* 📲 TABLET */
+/* -------------------- */
+@media (min-width:601px) and (max-width:1024px){
+
+.page-title{
+    font-size:26px;
+}
+
+.recipe-card img{
+    height:140px;
+}
+
+}
+
+/* -------------------- */
+/* 💻 DESKTOP */
+/* -------------------- */
+@media (min-width:1025px){
+
+.page-title{
+    font-size:32px;
+}
+
+.recipe-card img{
+    height:150px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<h1 class="page-title">My Favorites</h1>
+
+<div class="favorites-container">
+
+{% if recipes %}
+    {% for recipe in recipes %}
+    <div class="recipe-card">
+        {% if recipe.image_url %}
+            <img src="{{ recipe.image_url }}" alt="{{ recipe.name }}">
+        {% else %}
+            <div style="
+                width:100%;
+                height:140px;
+                background:#222;
+                border-radius:10px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                color:#888;
+            ">No Image</div>
+        {% endif %}
+
+        <h3>{{ recipe.name }}</h3>
+
+        <div class="buttons">
+            <a href="{% url 'simulate' recipe.id %}">View</a>
+            <form method="POST" action="{% url 'toggle_favorite' recipe.id %}">
+                {% csrf_token %}
+                <button type="submit">Remove</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+{% else %}
+<p class="no-favorites">
+    You have no favorite recipes yet. Explore 
+    <a href="{% url 'recipes' %}" style="color:#0ff;text-decoration:underline;">Recipes</a> to add some!
+</p>
+{% endif %}
+
+</div>
+
+</body>
+</html>
